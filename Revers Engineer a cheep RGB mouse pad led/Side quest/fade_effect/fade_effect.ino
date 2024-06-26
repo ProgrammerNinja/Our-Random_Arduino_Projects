@@ -3,8 +3,8 @@ const int redPin = 9;
 const int greenPin = 10;
 const int bluePin = 11;
 
-
-
+const int delay_amt =40 ;
+const int num = 5 ;
 void setup() {
   Serial.begin(9600);
   Serial.print("initing....");
@@ -12,16 +12,21 @@ void setup() {
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
-  cycleColors();
+  //cycleColors();
 
   
 }
 
 void loop() {
 
-   for (int i = 255; i >= 0; i -= 5) {
-    setColor(0, i, 0);  // Fade blue out
-    delay(30);
+  
+  for (int i = 255; i >= 0; i -= num) {
+    setColor(i, 255, i);  // Fade blue out
+    delay(delay_amt);
+  }
+  for (int i = 0; i <= 255; i += num) {
+    setColor(i, 255, i);  // Fade blue in
+    delay(delay_amt);
   }
 }
 
