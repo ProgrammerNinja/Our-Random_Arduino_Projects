@@ -12,17 +12,18 @@ void setup() {
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
+  cycleColors();
 
   
 }
 
 void loop() {
-  cycleColors();
+
    for (int i = 255; i >= 0; i -= 5) {
     setColor(0, i, 0);  // Fade blue out
     delay(30);
   }
- 
+}
 
 
 // Function to cycle through basic colors
