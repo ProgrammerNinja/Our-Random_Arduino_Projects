@@ -6,8 +6,6 @@ const int bluePin = 11;
 const int delay_amt =40 ;
 const int num = 5 ;
 void setup() {
-  Serial.begin(9600);
-  Serial.print("initing....");
   // Set the RGB pins as outputs
   pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
