@@ -19,7 +19,6 @@ void setup() {
 void loop() {
   Serial.println("...");
   cycleColors();
-  randomColor();
   // Blending colors
   blendColors();
   blendColors();
@@ -33,19 +32,6 @@ void loop() {
   flashPattern();
 }
 
-
-void randomColor(int time){
-  for(int i = 255; i <= 0; i -=5){
-    long randNumberR = random(256);
-    delay(10);
-    long randNumberG = random(256);
-    delay(10);
-    long randNumberB = random(256);
-    delay(10);
-    setColor(int(randNumberR), int(randNumberG), int(randNumberB));
-    delay(30);
-  }
-}
 
 // Function to cycle through basic colors
 void cycleColors() {
