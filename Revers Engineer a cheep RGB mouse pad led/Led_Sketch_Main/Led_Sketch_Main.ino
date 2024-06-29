@@ -57,9 +57,9 @@ void cycleColors() {
 // Function to blend colors
 void blendColors() {
  
-  for (int r = 0; r <= 255; r += 5) {
-    for (int g = 0; g <= 255; g += 5) {
-      for (int b = 0; b <= 255; b += 5) {
+  for (int r = 255; r <= 0; r -= 5) {
+    for (int g = 255; g <= 0; g -= 5) {
+      for (int b = 255; b <= 0; b -= 5) {
         setColor(r, g, b);
         delay(20);
       }
@@ -71,27 +71,27 @@ void blendColors() {
 void fadeColors() {
 
   for (int i = 0; i <= 255; i += 5) {
-    setColor(i, 0, 0);  // Fade red in
+    setColor(i, 255, 255);  // Fade red in
     delay(30);
   }
   for (int i = 255; i >= 0; i -= 5) {
-    setColor(i, 0, 0);  // Fade red out
+    setColor(i, 255, 255);  // Fade red out
     delay(30);
   }
   for (int i = 0; i <= 255; i += 5) {
-    setColor(0, i, 0);  // Fade green in
+    setColor(255, i, 255);  // Fade green in
     delay(30);
   }
   for (int i = 255; i >= 0; i -= 5) {
-    setColor(0, i, 0);  // Fade green out
+    setColor(255, i, 255);  // Fade green out
     delay(30);
   }
   for (int i = 0; i <= 255; i += 5) {
-    setColor(0, 0, i);  // Fade blue in
+    setColor(255, 255, i);  // Fade blue in
     delay(30);
   }
   for (int i = 255; i >= 0; i -= 5) {
-    setColor(0, 0, i);  // Fade blue out
+    setColor(255, 255, i);  // Fade blue out
     delay(30);
   }
 }
@@ -99,17 +99,17 @@ void fadeColors() {
 // Function to create a flashing pattern
 void flashPattern() {
   for (int i = 0; i < 5; i++) {
-    setColor(255, 0, 0);  // Flash red
+    setColor(0, 255, 255);  // Flash red
     delay(200);
-    setColor(0, 0, 0);  // Turn off
+    setColor(255, 255, 255);  // Turn off
     delay(200);
-    setColor(0, 255, 0);  // Flash green
+    setColor(255, 0, 255);  // Flash green
     delay(200);
-    setColor(0, 0, 0);  // Turn off
+    setColor(255, 255, 255);  // Turn off
     delay(200);
-    setColor(0, 0, 255);  // Flash blue
+    setColor(255, 255, 0);  // Flash blue
     delay(200);
-    setColor(0, 0, 0);  // Turn off
+    setColor(255, 255, 255);  // Turn off
     delay(200);
   }
 }
