@@ -34,7 +34,7 @@ void loop() {
 }
 
 
-void randomColor(int time){
+void randomColor(){
   for(int i = 255; i <= 0; i -=5){
     long randNumberR = random(256);
     delay(10);
