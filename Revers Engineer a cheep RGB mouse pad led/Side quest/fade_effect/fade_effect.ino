@@ -1,7 +1,7 @@
 // Define the pin connections for RGB
-const int redPin = 9;
-const int greenPin = 10;
-const int bluePin = 11;
+const int redPin = 0;
+const int greenPin = 1;
+const int bluePin = 2 ;
 
 const int delay_amt =40 ;
 const int num = 5 ;
@@ -17,7 +17,7 @@ void setup() {
 
 void loop() {
 
-  
+  cycleColors();
   for (int i = 255; i >= 0; i -= num) {
     setColor(i, 255, i);  // Fade blue out
     delay(delay_amt);
@@ -26,6 +26,7 @@ void loop() {
     setColor(i, 255, i);  // Fade blue in
     delay(delay_amt);
   }
+  cycleColors();
 }
 
 
