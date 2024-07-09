@@ -13,8 +13,8 @@
 char ssid[] = "IT";
 char pass[] = "TazinSayeed!@#";
 int redPin = 0;
-int greenPin = 0;
-int bluePin = 0;
+int greenPin = 1;
+int bluePin = 2;
 
 //global variables
   int sw = 0;
@@ -38,6 +38,7 @@ int b4 = 0;
 int r5 = 0;
 int g5 = 0;
 int b5 = 0;
+const int Fdelay = 20;
 //values from slider
 int redValue = 0;
 int greenValue = 0;
@@ -63,7 +64,7 @@ void checkBlynkStatus() { // called every 2 seconds by SimpleTimer
 
   bool isconnected = Blynk.connected();
   if (isconnected == false) {
-    Serial.println("Blynk Not Connected");
+    ////Serial.println("Blynk Not Connected");
   }
   if (isconnected == true) {
     setColor(0, 0, 255);
@@ -103,6 +104,7 @@ void cycleColors() {
   delay(1000);
   setColor(255, 255, 255);  // White
   delay(1000);
+  setColor(0, 0, 0);
 
 }
 
@@ -112,27 +114,30 @@ void fadeColors(int initialRed, int initialGreen, int initialBlue, int redValueQ
     if (redValueQ > 0) redValueQ -= 5;
     if (greenValueQ > 0) greenValueQ -= 5;
     if (blueValueQ > 0) blueValueQ -= 5;
-
+    setColor(redValueQ, greenValueQ, blueValueQ);
+    Blynk.syncVirtual(V4); // Sync the value of V4
+    Blynk.run();
     if (redValueQ < 0) redValueQ = 0;
     if (greenValueQ < 0) greenValueQ = 0;
     if (blueValueQ < 0) blueValueQ = 0;
-
+    delay(Fdelay);
     if (redValueQ == 0 && greenValueQ == 0 && blueValueQ == 0) {
       decreasing = false;
     }
+    
 
-    Serial.print("Red: ");
-    Serial.println(redValueQ);
-    Serial.print("Green: ");
-    Serial.println(greenValueQ);
-    Serial.print("Blue: ");
-    Serial.println(blueValueQ);
+    //Serial.print("Red: ");
+    //Serial.println(redValueQ);
+    //Serial.print("Green: ");
+    //Serial.println(greenValueQ);
+    //Serial.print("Blue: ");
+    //Serial.println(blueValueQ);
   } 
   while (decreasing == false && functionValue == 1) {
     if (redValueQ < initialRed) redValueQ += 5;
     if (greenValueQ < initialGreen) greenValueQ += 5;
     if (blueValueQ < initialBlue) blueValueQ += 5;
-
+    setColor(redValueQ, greenValueQ, blueValueQ);
     if (redValueQ > initialRed) redValueQ = initialRed;
     if (greenValueQ > initialGreen) greenValueQ = initialGreen;
     if (blueValueQ > initialBlue) blueValueQ = initialBlue;
@@ -140,12 +145,15 @@ void fadeColors(int initialRed, int initialGreen, int initialBlue, int redValueQ
     if (redValueQ == initialRed && greenValueQ == initialGreen && blueValueQ == initialBlue) {
       decreasing = true;
     }
-    Serial.print("Red: ");
-  Serial.println(redValueQ);
-  Serial.print("Green: ");
-  Serial.println(greenValueQ);
-  Serial.print("Blue: ");
-  Serial.println(blueValueQ);
+    Blynk.syncVirtual(V4); // Sync the value of V4
+    Blynk.run();
+    delay(Fdelay);
+    //Serial.print("Red: ");
+  //Serial.println(redValueQ);
+  //Serial.print("Green: ");
+  //Serial.println(greenValueQ);
+  //Serial.print("Blue: ");
+  //Serial.println(blueValueQ);
   }
 
   
@@ -160,15 +168,21 @@ BLYNK_WRITE(V0){
 BLYNK_WRITE(V1){
   int readValue = param.asInt();
   redValue = readValue;
+  int mValue = 255 - redValue;
+  analogWrite(redPin, mValue);
   
 }
 BLYNK_WRITE(V2){
   int readValue = param.asInt();
   greenValue = readValue;
+  int mValue = 255 - greenValue;
+  analogWrite(greenPin, mValue);
 }
 BLYNK_WRITE(V3){
   int readValue= param.asInt();
   blueValue = readValue;
+  int mValue = 255 - blueValue;
+  analogWrite(bluePin, mValue);
 }
 BLYNK_WRITE(V4){
   int readValue = param.asInt();
@@ -182,17 +196,24 @@ BLYNK_WRITE(V4){
 
 void setup() {
   // Debug console
-  Serial.begin(115200);
+  //Serial.begin(115200);
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
   WiFi.begin(ssid, pass);
+  setColor(255, 0, 0);
   while (WiFi.status() != WL_CONNECTED){
 
-    Serial.print("Connecting to WiFi..");
-    Serial.println(ssid);
-    //setColor(255, 0, 0);
+    //Serial.print("Connecting to WiFi..");
+    //Serial.println(ssid);
+    delay(500);
   }
+  setColor(0, 0, 255);
+  delay(1000);
   timer.setInterval(2000L, checkBlynkStatus); // check if Blynk server is connected every 2 seconds
   Blynk.config(BLYNK_AUTH_TOKEN);
   setColor(0, 255, 0);
+  delay(1000);
   delay(500);// WAIT FOR HALF SECONDS
 
 
@@ -202,71 +223,71 @@ void setup() {
 void loop() {
   Blynk.run();
   if (seqValue == 1 && functionValue == 1){
-    Serial.println("Setting Value for Color 1:");
+    //Serial.println("Setting Value for Color 1:");
     r1 = redValue;
-    Serial.print("Red= ");
-    Serial.println(r1);
+    //Serial.print("Red= ");
+    //Serial.println(r1);
     g1 = greenValue;
-    Serial.print("Green= ");
-    Serial.println(g1);
+    //Serial.print("Green= ");
+    //Serial.println(g1);
     b1 = blueValue;
-    Serial.print("Blue= ");
-    Serial.println(b1);
+    //Serial.print("Blue= ");
+    //Serial.println(b1);
     
   }
   if(seqValue == 2 && functionValue == 1){
 
-    Serial.println("Setting Value for Color 2:");
+    //Serial.println("Setting Value for Color 2:");
     r2 = redValue;
-    Serial.print("Red= ");
-    Serial.println(r2);
+    //Serial.print("Red= ");
+    //Serial.println(r2);
     g2 = greenValue;
-    Serial.print("Green= ");
-    Serial.println(g2);
+    //Serial.print("Green= ");
+    //Serial.println(g2);
     b2 = blueValue;
-    Serial.print("Blue= ");
-    Serial.println(b2);
+    //Serial.print("Blue= ");
+    //Serial.println(b2);
     
     
   }
   if(seqValue == 3 && functionValue == 1){
 
-    Serial.println("Setting Value for Color 3:");
+    //Serial.println("Setting Value for Color 3:");
     r3 = redValue;
-    Serial.print("Red= ");
-    Serial.println(r3);
+    //Serial.print("Red= ");
+    //Serial.println(r3);
     g3 = greenValue;
-    Serial.print("Green= ");
-    Serial.println(g3);
+    //Serial.print("Green= ");
+    //Serial.println(g3);
     b3 = blueValue;
-    Serial.println("Blue= ");
-    Serial.println(b3);
+    //Serial.println("Blue= ");
+    //Serial.println(b3);
     
   }
    if(seqValue == 4 && functionValue == 1){
-      Serial.println("Setting Value for Color 4:");
+      //Serial.println("Setting Value for Color 4:");
       r4 = redValue;
-      Serial.print("Red= ");
-      Serial.println(r4);
+      //Serial.print("Red= ");
+      //Serial.println(r4);
       g4 = greenValue;
-      Serial.print("Green= ");
-      Serial.println(g4);
+      //Serial.print("Green= ");
+      //Serial.println(g4);
       b4 = blueValue;
-      Serial.print("Blue= ");
-      Serial.println(b4);
+      //Serial.print("Blue= ");
+      //Serial.println(b4);
     
   }
    if(seqValue == 5 && functionValue == 1 ){
-      Serial.println("Setting Value for Color 5:");
+      //Serial.println("Setting Value for Color 5:");
       r5 = redValue;
-      Serial.print("Red= ");
-      Serial.println(r5);
+      //Serial.print("Red= ");
+      //Serial.println(r5);
       g5 = greenValue;
-      Serial.print("Green= ");
-      Serial.println(g5);
+      //Serial.print("Green= ");
+      //Serial.println(g5);
       b5 = blueValue;
-      Serial.print("Blue= ");
-      Serial.println(b5);
+      //Serial.print("Blue= ");
+      //Serial.println(b5);
     }
 
   if (seqValue == 0 && functionValue == 1 ){
@@ -275,13 +296,13 @@ void loop() {
     fadeColors(r3, g3, b3, r3, g3, b3);
     fadeColors(r4, g4, b4, r4, g4, b4);
     fadeColors(r5, g5, b5, r5, g5, b5);
-    /*Serial.println(r1);
-    Serial.println(r2);
-    Serial.println(r3);
-    Serial.println(g2);
-    Serial.println(g2);
+    /*//Serial.println(r1);
+    //Serial.println(r2);
+    //Serial.println(r3);
+    //Serial.println(g2);
+    //Serial.println(g2);
 */
-    Serial.println("on");
+    //Serial.println("on");
   }
   
  
